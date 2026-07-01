@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peached Employee Benefits</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Montserrat',system-ui,sans-serif;background:#FCEEE1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .wrap{width:100%;max-width:440px;background:#FCEEE1;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.10);}
+  .header{background:#FFC878;padding:28px 24px 20px;text-align:center;}
+  .logo{font-family:'Pacifico',cursive;font-size:2rem;color:#fff;line-height:1;margin:0 0 4px;}
+  .tagline{font-size:0.78rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.85);}
+  .body{padding:20px 18px 24px;}
+  .lookup-box{background:#fff;border-radius:12px;padding:18px 16px;margin-bottom:16px;border:1.5px solid #FEC979;}
+  .lookup-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.08em;font-weight:700;color:#999;margin-bottom:10px;}
+  .input-row{display:flex;gap:8px;}
+  .input-row input{flex:1;padding:10px 12px;border:1.5px solid #FEC979;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:0.95rem;color:#26211B;background:#FFF8F0;}
+  .input-row input:focus{outline:2px solid #FFC878;outline-offset:1px;}
+  .input-row button{padding:10px 16px;background:#FFC878;color:#fff;border:none;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;}
+  .input-row button:hover{background:#F6B79B;}
+  .input-row button:disabled{opacity:0.6;cursor:wait;}
+  .status-row{display:none;align-items:center;gap:8px;margin-top:12px;padding:10px 12px;border-radius:8px;font-weight:600;font-size:0.9rem;}
+  .status-row.active{background:#EFF7E0;color:#3B6D11;display:flex;}
+  .status-row.inactive{background:#FFF2EE;color:#993C1D;display:flex;}
+  .status-row.notfound{background:#F2F0E3;color:#888;display:flex;}
+  .status-row .dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none;}
+  .error-msg{display:none;color:#993C1D;font-size:0.82rem;margin-top:10px;}
+  .section-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:#999;margin:0 0 10px;}
+  .card{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;border-left:4px solid #FFC878;}
+  .card.teal{border-left-color:#3B6D11;}
+  .card.coral{border-left-color:#D96B3C;}
+  .card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .icon{width:38px;height:38px;border-radius:9px;background:#FFF0D6;display:flex;align-items:center;justify-content:center;flex:none;font-size:1.25rem;}
+  .card.teal .icon{background:#EFF7E0;}
+  .card.coral .icon{background:#FFF2EE;}
+  .card-title{font-size:0.92rem;font-weight:700;margin-bottom:1px;color:#26211B;}
+  .card-org{font-size:0.72rem;color:#999;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
+  .divider{border:none;border-top:1px solid #F2EDE3;margin:10px 0;}
+  .detail{font-size:0.82rem;color:#555;line-height:1.55;margin-bottom:8px;}
+  .pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;}
+  .pill{padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:700;background:#FFF0D6;color:#BA7517;}
+  .card.teal .pill{background:#EFF7E0;color:#3B6D11;}
+  .card.coral .pill{background:#FFF2EE;color:#993C1D;}
+  .contact{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:#888;margin-top:6px;}
+  .contact i{font-size:14px;}
+  .footer{text-align:center;padding:0 0 20px;font-size:0.75rem;color:#999;}
+  #benefits-section{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="logo">Peached</div>
+    <div class="tagline">Employee Benefits & Status</div>
+  </div>
+  <div class="body">
+
+    <div class="lookup-box">
+      <div class="lookup-label">Check your status</div>
+      <div class="input-row">
+        <input type="text" id="empId" inputmode="numeric" placeholder="Employee ID (e.g. 2450)" autocomplete="off">
+        <button id="lookupBtn" onclick="lookup()">Look up</button>
+      </div>
+      <div class="status-row" id="statusRow">
+        <span class="dot"></span>
+        <span id="statusText"></span>
+      </div>
+      <div class="error-msg" id="errorMsg">Could not reach the lookup service. Please try again.</div>
+    </div>
+
+    <div id="benefits-section">
+      <div class="section-label">Your benefits</div>
+
+      <div class="card" id="card-peached">
+        <div class="card-header">
+          <div class="icon">🍑</div>
+          <div>
+            <div class="card-title">Peached Tortilla Discount</div>
+            <div class="card-org">Peached family perk</div>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="detail">50% off all food at Peached Tortilla on Burnet and in Cedar Park. Peached merchandise is available for purchase at cost.</div>
+        <div class="pills">
+          <span class="pill">All locations</span>
+          <span class="pill">Burnet</span>
+          <span class="pill">Cedar Park</span>
+        </div>
+      </div>
+
+      <div class="card teal" id="card-cac">
+        <div class="card-header">
+          <div class="icon">🧠</div>
+          <div>
+            <div class="card-title">Mental Health Support</div>
+            <div class="card-org">Capital Area Counseling · Mike & Sherry Project</div>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="detail">High-quality, affordable counseling for adults, adolescents, children, couples, and families — in English and Spanish. Sessions are $25 and held weekly (50 min). No annual session limit.</div>
+        <div class="pills">
+          <span class="pill">Individual</span>
+          <span class="pill">Couples</span>
+          <span class="pill">Family</span>
+          <span class="pill">Group — $5</span>
+          <span class="pill">Telehealth available</span>
+        </div>
+        <div class="contact"><i class="ti ti-mail" aria-hidden="true"></i> mikeandsherry@cacaustin.org</div>
+        <div class="contact"><i class="ti ti-phone" aria-hidden="true"></i> 512-302-1000</div>
+      </div>
+
+      <div class="card coral" id="card-mantle">
+        <div class="card-header">
+          <div class="icon">🧖</div>
+          <div>
+            <div class="card-title">Wellness Access</div>
+            <div class="card-org">Mantle Thermal Haus · Service the Service</div>
+          </div>
+        </div>
+        <hr class="divider">
+        <div class="detail">Free wellness services every day Mantle Thermal Haus is open — available to all participating hospitality group employees. Good health should be accessible for all.</div>
+        <div class="pills">
+          <span class="pill">Free every open day</span>
+          <span class="pill">All locations</span>
+        </div>
+        <div class="contact"><i class="ti ti-mail" aria-hidden="true"></i> heatcold@mantlethermal.com</div>
+        <div class="contact"><i class="ti ti-phone" aria-hidden="true"></i> 512-565-1963</div>
+      </div>
+
+    </div>
+  </div>
+  <div class="footer">Questions? Talk to your manager.</div>
+</div>
+
+<script>
+  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxv79fOanPaFIVnYtjRfYFBzPpkFaBW3dakucR9ZLrTtTY7JYwGnNFw9cMEMS2TODc-/exec";
+
+  async function lookup() {
+    const id = document.getElementById('empId').value.trim();
+    if (!id) return;
+
+    const btn = document.getElementById('lookupBtn');
+    const statusRow = document.getElementById('statusRow');
+    const statusText = document.getElementById('statusText');
+    const errorMsg = document.getElementById('errorMsg');
+    const benefitsSection = document.getElementById('benefits-section');
+
+    btn.disabled = true;
+    btn.textContent = 'Checking...';
+    errorMsg.style.display = 'none';
+    statusRow.className = 'status-row';
+    benefitsSection.style.display = 'none';
+
+    try {
+      const res = await fetch(WEBAPP_URL + '?id=' + encodeURIComponent(id));
+      const data = await res.json();
+
+      if (!data.found) {
+        statusRow.className = 'status-row notfound';
+        statusText.textContent = 'Employee ID not found';
+      } else {
+        const isActive = String(data.status).toLowerCase() === 'active';
+        statusRow.className = 'status-row ' + (isActive ? 'active' : 'inactive');
+        statusText.textContent = (isActive ? 'Active' : 'Inactive') + ' · ' + data.location;
+        benefitsSection.style.display = 'block';
+      }
+    } catch (err) {
+      errorMsg.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Look up';
+    }
+  }
+
+  document.getElementById('empId').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') lookup();
+  });
+</script>
+</body>
+</html>
